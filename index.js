@@ -1,7 +1,8 @@
-const bodyParser = require('body-parser')
 const express = require('express')
+const bodyParser = require('body-parser')
 const logger = require('morgan')
 const app = express()
+
 const {
   fallbackHandler,
   notFoundHandler,
@@ -19,25 +20,49 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(poweredByHandler)
 
+
+
 // --- SNAKE LOGIC GOES BELOW THIS LINE ---
 
-// Handle POST request to '/start'
+// Handle POST request to '/start'------------------------------------------------------//
 app.post('/start', (request, response) => {
   // NOTE: Do something here to start the game
+  // console.log(request.body);
+  // response.send(request.body);
+
+
+
 
   // Response data
   const data = {
     color: '#DFFF00',
     head_url: 'http://www.placecage.com/c/200/200', // optional, but encouraged!
     taunt: "Let's do thisss thang!", // optional, but encouraged!
+
   }
 
   return response.json(data)
 })
 
-// Handle POST request to '/move'
+// --------Handle POST request to '/move'------------------------------------------------//
 app.post('/move', (request, response) => {
   // NOTE: Do something here to generate your move
+  const reqData = request.body;
+
+
+  function getFoodCoord(){
+  	for(i=0;i<reqData.food.data.length;i++){
+  		var arr = reqData.food.data[i];
+  		for(var prop in arr){
+  			var coords = [arr['x'], arr['y']];
+  		}
+  	}
+  	return coords;
+  }
+
+  let foodXY =  getFoodCoord();
+
+
 
   // Response data
   const data = {
