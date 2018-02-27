@@ -24,7 +24,7 @@ app.use(poweredByHandler)
 
 // --- SNAKE LOGIC GOES BELOW THIS LINE ---
 
-// Handle POST request to '/start'------------------------------------------------------//
+// Handle POST request to '/start'
 app.post('/start', (request, response) => {
   // NOTE: Do something here to start the game
   // console.log(request.body);
@@ -44,24 +44,89 @@ app.post('/start', (request, response) => {
   return response.json(data)
 })
 
-// --------Handle POST request to '/move'------------------------------------------------//
+// --------Handle POST request to '/move'--------------//
 app.post('/move', (request, response) => {
   // NOTE: Do something here to generate your move
   const reqData = request.body;
 
 
-  function getFoodCoord(){
-  	for(i=0;i<reqData.food.data.length;i++){
-  		var arr = reqData.food.data[i];
-  		for(var prop in arr){
-  			var coords = [arr['x'], arr['y']];
-  		}
+  //GRID DIMENSION
+  const gridDim = [reqData['width'], reqData['height']];
+
+  //FOOD
+  const food = reqData.food.data
+  function getFoodCoord(prepend){
+  	var arr = [];
+  	for(i=0;i<food.length;i++){
+  		arr[i] = food[i];
   	}
-  	return coords;
+  	return arr;
+  }
+  let foodCoord =  getFoodCoord();
+  // console.log(foodCoord[0]['y'])
+
+
+  //MY SNAKE
+  const me = reqData.you
+  function mySnake(prepend) {
+  	var arr = [];
+  	for(i=0;i<me.body.data.length;i++){
+  		arr[i] = me.body.data[i];
+  	}
+  	return arr;
+  }
+  //mySnakeCoord[0] is snake head.
+  let mySnakeCoord = mySnake(me);
+  // console.log(mySnakeCoord[0]['x'])
+
+  
+  //ENEMY
+  var snakes = reqData.snakes.data
+  function enemySnakeCoord(prepend){
+  	var data = [];
+   	for(i=0;i<prepend.length;i++){
+  		data[i] = prepend[i].body.data;
+  	}
+  	return data;
+  }
+  var enemySnake = enemySnakeCoord(snakes);
+  // console.log(enemySnake[0][0]['x']);
+
+  //MOVEMENT
+  function chooseDir(prependSnake, prependGoal){
+  	var direction = {
+  		'up': prependSnake[0]['y'] - prependGoal[0]['y'] > 0,
+  		'down': prependSnake[0]['y'] - prependGoal[0]['y'] < 0,
+  		'left': prependSnake[0]['x'] - prependGoal[0]['x'] > 0,
+  		'right': prependSnake[0]['x'] - prependGoal[0]['x'] < 0
+	  };
+	  return direction;
   }
 
-  let foodXY =  getFoodCoord();
+  var dirToFood = chooseDir(mySnakeCoord, foodCoord);
+  console.log(dirToFood.up);
+  console.log(dirToFood.down);
+  console.log(dirToFood.left);
+  console.log(dirToFood.right);
 
+  function move(towards){
+  	while(false){
+	  	if(towards.up = true){
+	  		mySnakeCoord[0]['y'] -= 1;
+	  	} else if(towards.down = true){
+	  		mySnakeCoord[0]['y'] += 1;
+	  	} else if(towards.left = true){
+	  		mySnakeCoord[0]['x'] -= 1;
+	  	} else if(towards.right = true){
+	  		mySnakeCoord[0]['x'] += 1;
+	  	} else{
+	  		break;
+	  	}
+	  }
+	  return [mySnakeCoord[0]['x'], mySnakeCoord[0]['y']]
+	}
+
+	console.log(move(dirToFood))
 
 
   // Response data
