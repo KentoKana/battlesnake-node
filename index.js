@@ -20,8 +20,6 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(poweredByHandler)
 
-
-
 // --- SNAKE LOGIC GOES BELOW THIS LINE ---
 
 // Handle POST request to '/start'
@@ -29,9 +27,6 @@ app.post('/start', (request, response) => {
   // NOTE: Do something here to start the game
   // console.log(request.body);
   // response.send(request.body);
-
-
-
 
   // Response data
   const data = {
@@ -46,97 +41,83 @@ app.post('/start', (request, response) => {
 
 // --------Handle POST request to '/move'--------------//
 app.post('/move', (request, response) => {
-  // NOTE: Do something here to generate your move
-  const reqData = request.body;
+	data = processData(request);
+  console.log(data);
+  return response.json(data);
+})
 
+function processData(request) {
+	data = {
+		taunt: makeTaunt(),
+		move: getMove(request)
+	}
+	return data;
+}
 
-  //GRID DIMENSION
-  const gridDim = [reqData['width'], reqData['height']];
+function makeTaunt() {
+	return "taunty mc taunt"
+}
 
-  //FOOD
-  const food = reqData.food.data
-  function getFoodCoord(prepend){
-  	var arr = [];
-  	for(i=0;i<food.length;i++){
-  		arr[i] = food[i];
-  	}
-  	return arr;
-  }
-  let foodCoord =  getFoodCoord();
-  // console.log(foodCoord[0]['y'])
+function getMove(request) {
+	const reqData = request.body;
+	var grid = makeEmptyGrid(reqData);
+	var apples = reqData.food.data;
+	var enemys = reqData.snakes.data;
+	var myself = reqData.you;
 
+	// console.log(grid);
+	// console.log(apples);
+	// console.log(enemys);
+	// console.log(myself);
 
-  //MY SNAKE
-  const me = reqData.you
-  function mySnake(prepend) {
-  	var arr = [];
-  	for(i=0;i<me.body.data.length;i++){
-  		arr[i] = me.body.data[i];
-  	}
-  	return arr;
-  }
-  //mySnakeCoord[0] is snake head.
-  let mySnakeCoord = mySnake(me);
-  // console.log(mySnakeCoord[0]['x'])
+	//MOVEMENT################################################################
+  var choosePath = chooseDir(myself.body.data[0], apples[0]);
 
   
-  //ENEMY
-  var snakes = reqData.snakes.data
-  function enemySnakeCoord(prepend){
-  	var data = [];
-   	for(i=0;i<prepend.length;i++){
-  		data[i] = prepend[i].body.data;
-  	}
-  	return data;
-  }
-  var enemySnake = enemySnakeCoord(snakes);
-  // console.log(enemySnake[0][0]['x']);
 
-  //MOVEMENT
-  function chooseDir(prependSnake, prependGoal){
-  	var direction = {
-  		'up': prependSnake[0]['y'] - prependGoal[0]['y'] > 0,
-  		'down': prependSnake[0]['y'] - prependGoal[0]['y'] < 0,
-  		'left': prependSnake[0]['x'] - prependGoal[0]['x'] > 0,
-  		'right': prependSnake[0]['x'] - prependGoal[0]['x'] < 0
-	  };
-	  return direction;
-  }
+  //AVOID THINGS############################################################
 
-  var dirToFood = chooseDir(mySnakeCoord, foodCoord);
-  console.log(dirToFood.up);
-  console.log(dirToFood.down);
-  console.log(dirToFood.left);
-  console.log(dirToFood.right);
+	// printGrid(grid);
 
-  function move(towards){
-  	while(false){
-	  	if(towards.up = true){
-	  		mySnakeCoord[0]['y'] -= 1;
-	  	} else if(towards.down = true){
-	  		mySnakeCoord[0]['y'] += 1;
-	  	} else if(towards.left = true){
-	  		mySnakeCoord[0]['x'] -= 1;
-	  	} else if(towards.right = true){
-	  		mySnakeCoord[0]['x'] += 1;
-	  	} else{
-	  		break;
-	  	}
-	  }
-	  return [mySnakeCoord[0]['x'], mySnakeCoord[0]['y']]
+	return choosePath
+}
+
+function chooseDir(me, goal) {
+	if(me['y'] - goal['y'] > 0){
+		return 'up';
+	} else if(me['y'] - goal['y'] < 0){
+		return 'down';
+	} else if(me['x'] - goal['x'] > 0){
+		return 'left';
+	} else if(me['x'] - goal['x'] < 0){
+		return 'right';
 	}
+}
 
-	console.log(move(dirToFood))
+function makeEmptyGrid(reqData) {
+	let grid = [];
+	for(i=0; i<reqData.width; i++){
+		grid[i] = [];
+		for(j=0; j<reqData.height; j++){
+			grid[i][j] = {x: j, y: i};
+		}	
+	}
+	return grid;
+}
 
+// Change to accept a coord object
+function neighbors(x, y){
+	var neighbors = [{x: x+1 , y: y }, {x: x-1, y: y}, {x: x, y: y-1}, {x: x, y: y+1}];
+	return neighbors;
+}
 
-  // Response data
-  const data = {
-    move: 'up', // one of: ['up','down','left','right']
-    taunt: 'Outta my way, snake!', // optional, but encouraged!
-  }
+function checker(grid, coord){
+	return grid[coord.y][coord.y];
+}
 
-  return response.json(data)
-})
+function printGrid(grid) {
+
+}
 
 // --- SNAKE LOGIC GOES ABOVE THIS LINE ---
 
