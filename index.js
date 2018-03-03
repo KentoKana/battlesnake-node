@@ -78,7 +78,7 @@ function getMove(request) {
 	var checkBod = checker(grid, myself.body.data[1]);
 	// console.log(checkBod);
 	var filler = fillGrid(reqData, grid);
-	 
+	// console.log(filler);
 
 
 
@@ -101,18 +101,22 @@ function getMove(request) {
 		// console.log(goal);
 		for(i=0;i<reqData.height;i++){
 			for(j=0;j<reqData.width;j++){
-				if(grid[i][j].myBod !== true && me['y'] - goal['y'] > 0){
-					return 'up';
-				} else if(grid[i][j].myBod !== true && me['y'] - goal['y'] < 0){
-					return 'down';
-				} else if(grid[i][j].myBod !== true && me['x'] - goal['x'] > 0){
-					return 'left';
-				} else if(grid[i][j].myBod !== true && me['x'] - goal['x'] < 0){
-					return 'right';
+				if(grid[i][j].myBod !== true){
+					if(me['y'] - goal['y'] > 0){
+						return 'up';
+					} else if(me['y'] - goal['y'] < 0){
+						return 'down';
+					} else if(me['x'] - goal['x'] > 0){
+						return 'left';
+					} else if(me['x'] - goal['x'] < 0){
+						return 'right';
+					}
 				}
 			}
 		}
 	}
+
+	console.log(chooseDir(myself.body.data[0], apples[0]));
 
 	// printGrid(grid);
 
