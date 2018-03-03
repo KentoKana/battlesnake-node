@@ -74,6 +74,20 @@ function getMove(request) {
 
 	//MOVEMENT################################################################
   var choosePath = chooseDir(myself.body.data[0], apples[0]);
+  
+	function chooseDir(me, goal) {
+		console.log(me);
+		console.log(goal);
+		if(me['y'] - goal['y'] > 0){
+			return 'up';
+		} else if(me['y'] - goal['y'] < 0){
+			return 'down';
+		} else if(me['x'] - goal['x'] > 0){
+			return 'left';
+		} else if(me['x'] - goal['x'] < 0){
+			return 'right';
+		}
+	}
 
 
 
