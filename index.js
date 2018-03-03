@@ -31,10 +31,11 @@ app.post('/start', (request, response) => {
 
   // Response data
   const data = {
-    color: '#FF8C00',
-    head_url: 'http://www.placecage.com/c/200/200', // optional, but encouraged!
-    taunt: "KEPT YOU WAITING HUH?", // optional, but encouraged!
-  }
+    "color": "#FF0000",
+    "secondary_color": "#00FF00",
+    "head_url": "http://placecage.com/c/100/100",
+    "taunt": "Kept you waiting huh?",
+}
 
   return response.json(data)
 })
@@ -43,7 +44,7 @@ app.post('/start', (request, response) => {
 app.post('/move', (request, response) => {
 	data = processData(request);
   console.log(data);
-  
+
   return response.json(data);
 })
 
@@ -56,7 +57,7 @@ function processData(request) {
 }
 
 function makeTaunt() {
-	return "taunty mc taunt"
+	return "Metal Geeeeaaar!?"
 }
 
 function getMove(request) {
@@ -73,10 +74,26 @@ function getMove(request) {
 
 	//MOVEMENT################################################################
   var choosePath = chooseDir(myself.body.data[0], apples[0]);
+  var chooseTail = chooseDir(myself.body.data[0], myself.body.data[myself.body.data.length-1])
+
+  function beDoggo(chaseTail, dogTreat){
+  	if(myself.health > 50){
+  		chaseTail;
+  	} else {
+  		dogTreat;
+  	}
+  }
+
+  console.log(beDoggo(chooseTail, choosePath));
+
+  
+
 
 
 
   //AVOID THINGS############################################################
+
+ 
 
 	// printGrid(grid);
 
@@ -89,7 +106,7 @@ function makeEmptyGrid(reqData) {
 	for(i=0; i<reqData.width; i++){
 		grid[i] = [];
 		for(j=0; j<reqData.height; j++){
-			grid[i][j] = {x: j, y: i};
+			grid[i][j] = {x: j, y: i, myHead: false, myBod: false, enemy: false, apple: false};
 		}	
 	}
 	return grid;
@@ -102,12 +119,25 @@ function neighbors(x, y){
 }
 
 function checker(grid, coord){
-	return grid[coord.y][coord.y];
+	return grid[coord.x][coord.y];
+} 
+
+function chooseDir(me, goal) {
+	// console.log(me);
+	// console.log(goal);
+	if(me['y'] - goal['y'] > 0){
+		return 'up';
+	} else if(me['y'] - goal['y'] < 0){
+		return 'down';
+	} else if(me['x'] - goal['x'] > 0){
+		return 'left';
+	} else if(me['x'] - goal['x'] < 0){
+		return 'right';
+	}
 }
 
-function printGrid(grid) {
 
-}
+
 
 // --- SNAKE LOGIC GOES ABOVE THIS LINE ---
 
