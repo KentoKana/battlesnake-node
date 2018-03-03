@@ -4,15 +4,15 @@ const logger = require('morgan')
 const app = express()
 
 const {
-  fallbackHandler,
-  notFoundHandler,
-  genericErrorHandler,
-  poweredByHandler
+	fallbackHandler,
+	notFoundHandler,
+	genericErrorHandler,
+	poweredByHandler
 } = require('./handlers.js')
 
 // For deployment to Heroku, the port needs to be set using ENV, so
 // we check for the port number in process.env
-app.set('port', (process.env.PORT || config.port))
+app.set('port', (process.env.PORT || configure.port))
 
 app.enable('verbose errors')
 
@@ -31,11 +31,11 @@ app.post('/start', (request, response) => {
 
   // Response data
   const data = {
-    "color": "#FF0000",
-    "secondary_color": "#00FF00",
-    "head_url": "http://placecage.com/c/100/100",
-    "taunt": "Kept you waiting huh?",
-}
+  	"color": "#FF0000",
+  	"secondary_color": "#00FF00",
+  	"head_url": "http://placecage.com/c/100/100",
+  	"taunt": "Kept you waiting huh?",
+  }
 
   return response.json(data)
 })
@@ -43,9 +43,9 @@ app.post('/start', (request, response) => {
 // --------Handle POST request to '/move'--------------//
 app.post('/move', (request, response) => {
 	data = processData(request);
-  console.log(data);
+	console.log(data);
 
-  return response.json(data);
+	return response.json(data);
 })
 
 function processData(request) {
@@ -61,7 +61,7 @@ function makeTaunt() {
 }
 
 function getMove(request) {
-	const reqData = request.body;
+	var reqData = request.body;
 	var grid = makeEmptyGrid(reqData);
 	var apples = reqData.food.data;
 	var enemys = reqData.snakes.data;
@@ -73,32 +73,49 @@ function getMove(request) {
 	// console.log(myself);
 
 	//MOVEMENT################################################################
-  var choosePath = chooseDir(myself.body.data[0], apples[0]);
-  var chooseTail = chooseDir(myself.body.data[0], myself.body.data[myself.body.data.length-1])
-
-  function beDoggo(chaseTail, dogTreat){
-  	if(myself.health > 50){
-  		chaseTail;
-  	} else {
-  		dogTreat;
-  	}
-  }
-
-  console.log(beDoggo(chooseTail, choosePath));
-
-  
-
+	var choosePath = chooseDir(myself.body.data[0], apples[0]);
+	var neighbor = neighbors(myself.body.data[0].x, myself.body.data[0].y);
+	var checkBod = checker(grid, myself.body.data[1]);
+	// console.log(checkBod);
+	var filler = fillGrid(reqData, grid);
+	console.log(filler);
 
 
 
   //AVOID THINGS############################################################
 
- 
+  function fillGrid(reqData, emptyGrid){
+  	for(i=0;i<reqData.height;i++){
+  		for(j=0;j<reqData.width;j++){
+  			if(checkBod.x === emptyGrid[i][j].x && checkBod.y === emptyGrid[i][j].y){
+  				emptyGrid[i][j].myBod = true
+  			}
+  		}
+  	}
+  	return emptyGrid;
+  }
+
+
+	function chooseDir(me, goal) {
+		// console.log(me);
+		// console.log(goal);
+		if(filler !== true && me['y'] - goal['y'] > 0){
+			return 'up';
+		} else if(filler !== true && me['y'] - goal['y'] < 0){
+			return 'down';
+		} else if(filler !== true && me['x'] - goal['x'] > 0){
+			return 'left';
+		} else if(filler !== true && me['x'] - goal['x'] < 0){
+			return 'right';
+		}
+	}
 
 	// printGrid(grid);
 
 	return choosePath
 }
+
+
 
 
 function makeEmptyGrid(reqData) {
@@ -122,19 +139,6 @@ function checker(grid, coord){
 	return grid[coord.x][coord.y];
 } 
 
-function chooseDir(me, goal) {
-	// console.log(me);
-	// console.log(goal);
-	if(me['y'] - goal['y'] > 0){
-		return 'up';
-	} else if(me['y'] - goal['y'] < 0){
-		return 'down';
-	} else if(me['x'] - goal['x'] > 0){
-		return 'left';
-	} else if(me['x'] - goal['x'] < 0){
-		return 'right';
-	}
-}
 
 
 
@@ -146,5 +150,5 @@ app.use(notFoundHandler)
 app.use(genericErrorHandler)
 
 app.listen(app.get('port'), () => {
-  console.log('Server listening on port %s', app.get('port'))
+	console.log('Server listening on port %s', app.get('port'))
 })
