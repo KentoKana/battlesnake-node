@@ -31,9 +31,9 @@ app.post('/start', (request, response) => {
 
   // Response data
   const data = {
-    color: '#FF8C00',
-    head_url: 'http://www.placecage.com/c/200/200', // optional, but encouraged!
-    taunt: "KEPT YOU WAITING HUH?", // optional, but encouraged!
+    "color": '#FF8C00',
+    "head_url": 'http://www.placecage.com/c/200/200', // optional, but encouraged!
+    "taunt": "KEPT YOU WAITING HUH?", // optional, but encouraged!
   }
 
   return response.json(data)
@@ -43,7 +43,7 @@ app.post('/start', (request, response) => {
 app.post('/move', (request, response) => {
 	data = processData(request);
   console.log(data);
-  
+
   return response.json(data);
 })
 
