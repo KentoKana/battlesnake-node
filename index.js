@@ -12,7 +12,7 @@ const {
 
 // For deployment to Heroku, the port needs to be set using ENV, so
 // we check for the port number in process.env
-app.set('port', (process.env.PORT || 9001))
+app.set('port', (process.env.PORT || config.port))
 
 app.enable('verbose errors')
 
@@ -31,10 +31,11 @@ app.post('/start', (request, response) => {
 
   // Response data
   const data = {
-    "color": '#FF8C00',
-    "head_url": 'http://www.placecage.com/c/200/200', // optional, but encouraged!
-    "taunt": "KEPT YOU WAITING HUH?", // optional, but encouraged!
-  }
+    "color": "#FF0000",
+    "secondary_color": "#00FF00",
+    "head_url": "http://placecage.com/c/100/100",
+    "taunt": "Kept you waiting huh?",
+}
 
   return response.json(data)
 })
