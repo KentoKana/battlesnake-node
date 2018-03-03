@@ -12,7 +12,7 @@ const {
 
 // For deployment to Heroku, the port needs to be set using ENV, so
 // we check for the port number in process.env
-app.set('port', (process.env.PORT || configure.port))
+app.set('port', (process.env.PORT || config.port))
 
 app.enable('verbose errors')
 
@@ -78,7 +78,7 @@ function getMove(request) {
 	var checkBod = checker(grid, myself.body.data[1]);
 	// console.log(checkBod);
 	var filler = fillGrid(reqData, grid);
-	console.log(filler);
+	 
 
 
 
