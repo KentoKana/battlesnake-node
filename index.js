@@ -26,14 +26,14 @@ app.use(poweredByHandler)
 app.post('/start', (request, response) => {
   // NOTE: Do something here to start the game
   // console.log(request.body);
-  // response.send(request.body);
+  var reqData = request.body;
+
 
   // Response data
   const data = {
-    color: '#DFFF00',
+    color: '#FF8C00',
     head_url: 'http://www.placecage.com/c/200/200', // optional, but encouraged!
-    taunt: "Let's do thisss thang!", // optional, but encouraged!
-
+    taunt: "KEPT YOU WAITING HUH?", // optional, but encouraged!
   }
 
   return response.json(data)
@@ -43,6 +43,7 @@ app.post('/start', (request, response) => {
 app.post('/move', (request, response) => {
 	data = processData(request);
   console.log(data);
+  
   return response.json(data);
 })
 
@@ -73,7 +74,7 @@ function getMove(request) {
 	//MOVEMENT################################################################
   var choosePath = chooseDir(myself.body.data[0], apples[0]);
 
-  
+
 
   //AVOID THINGS############################################################
 
@@ -82,17 +83,6 @@ function getMove(request) {
 	return choosePath
 }
 
-function chooseDir(me, goal) {
-	if(me['y'] - goal['y'] > 0){
-		return 'up';
-	} else if(me['y'] - goal['y'] < 0){
-		return 'down';
-	} else if(me['x'] - goal['x'] > 0){
-		return 'left';
-	} else if(me['x'] - goal['x'] < 0){
-		return 'right';
-	}
-}
 
 function makeEmptyGrid(reqData) {
 	let grid = [];
