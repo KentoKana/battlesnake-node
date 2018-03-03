@@ -57,7 +57,7 @@ function processData(request) {
 }
 
 function makeTaunt() {
-	return "taunty mc taunt"
+	return "Metal Geeeeaaar!?"
 }
 
 function getMove(request) {
@@ -74,7 +74,7 @@ function getMove(request) {
 
 	//MOVEMENT################################################################
   var choosePath = chooseDir(myself.body.data[0], apples[0]);
-  
+
 	function chooseDir(me, goal) {
 		console.log(me);
 		console.log(goal);
