@@ -74,24 +74,26 @@ function getMove(request) {
 
 	//MOVEMENT################################################################
   var choosePath = chooseDir(myself.body.data[0], apples[0]);
+  var chooseTail = chooseDir(myself.body.data[0], myself.body.data[myself.body.data.length-1])
 
-	function chooseDir(me, goal) {
-		console.log(me);
-		console.log(goal);
-		if(me['y'] - goal['y'] > 0){
-			return 'up';
-		} else if(me['y'] - goal['y'] < 0){
-			return 'down';
-		} else if(me['x'] - goal['x'] > 0){
-			return 'left';
-		} else if(me['x'] - goal['x'] < 0){
-			return 'right';
-		}
-	}
+  function beDoggo(chaseTail, dogTreat){
+  	if(myself.health > 50){
+  		chaseTail;
+  	} else {
+  		dogTreat;
+  	}
+  }
+
+  console.log(beDoggo(chooseTail, choosePath));
+
+  
+
 
 
 
   //AVOID THINGS############################################################
+
+ 
 
 	// printGrid(grid);
 
@@ -104,7 +106,7 @@ function makeEmptyGrid(reqData) {
 	for(i=0; i<reqData.width; i++){
 		grid[i] = [];
 		for(j=0; j<reqData.height; j++){
-			grid[i][j] = {x: j, y: i};
+			grid[i][j] = {x: j, y: i, myHead: false, myBod: false, enemy: false, apple: false};
 		}	
 	}
 	return grid;
@@ -117,12 +119,25 @@ function neighbors(x, y){
 }
 
 function checker(grid, coord){
-	return grid[coord.y][coord.y];
+	return grid[coord.x][coord.y];
+} 
+
+function chooseDir(me, goal) {
+	// console.log(me);
+	// console.log(goal);
+	if(me['y'] - goal['y'] > 0){
+		return 'up';
+	} else if(me['y'] - goal['y'] < 0){
+		return 'down';
+	} else if(me['x'] - goal['x'] > 0){
+		return 'left';
+	} else if(me['x'] - goal['x'] < 0){
+		return 'right';
+	}
 }
 
-function printGrid(grid) {
 
-}
+
 
 // --- SNAKE LOGIC GOES ABOVE THIS LINE ---
 
